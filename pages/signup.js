@@ -9,24 +9,35 @@ export default function(props){
     let [info,setInfo]=useState({name:"",email:"",password:""})
     let [error,seterror]=useState("")
     let router=useRouter()
-
+    let [loading,setLoading]=useState(false) 
     async function login(e){
 e.preventDefault()
 
-
+setLoading(true)
 if(!info.password.trim() || !info.email.trim() || !info.name.trim()){
   seterror("Empty field(s) not allowed")
+  setLoading(false)
   return
 }
 
- let res= await axios({url:"/api/signupuser",method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},data:info})
+let res
+try {
+  
+  res= await axios({url:"/api/signupuser",method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},data:info})
+} catch (error) {
+  seterror("Error occured" + error)
+  setLoading(false)
+  return
+}
 
  if(res.data.sucess){
+  setLoading(false)
     seterror("")
      setInfo({name:"",email:"",password:""})
      props.setLoggedIn(true)
      router.push("/dashboard")
  }else{
+  setLoading(false)
 seterror("Please provide valid data")
  }
 
@@ -61,6 +72,11 @@ seterror("Please provide valid data")
   <input name="password" type="password" required class="form-control" id="floatingPassword" placeholder="Password" value={info.password} onChange={(e)=>{setInfo(p=>({...p,password:e.target.value}))}} />
   <label htmlFor="floatingPassword">Password</label>
 </div>
+{loading?<><div class=" mt-2 d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div></> :""}
             <button className="btn btn-primary"  style={{width:"100%",marginTop:"1rem"}} type="submit">Sign Up</button>
     
         </form>
