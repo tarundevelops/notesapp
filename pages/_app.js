@@ -7,11 +7,11 @@ import { useState } from 'react'
 export default function App({ Component, pageProps }) {
   const [isLoggedIn,setLoggedIn] = useState(false)
   let router = useRouter()
-   async function logoutuser(){
-        await axios.get("/api/logout")
-
+    function logoutuser(){
+        axios.get("/api/logout").then(()=>{
         setLoggedIn(false)
         router.push("/")
+        })
     }
   return (
     <>
