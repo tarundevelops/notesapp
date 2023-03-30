@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }) {
   const [isLoggedIn,setLoggedIn] = useState(false)
   let router = useRouter()
     function logoutuser(){
-        axios.get("/api/logout").then(()=>{
+        axios.get("/api/logout").then((data)=>{
         setLoggedIn(false)
         router.push("/")
         })
