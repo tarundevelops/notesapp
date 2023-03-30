@@ -11,6 +11,7 @@ export default function App({ Component, pageProps }) {
         axios.get("/api/logout").then((data)=>{
         setLoggedIn(false)
         router.push("/")
+
         })
     }
   return (
